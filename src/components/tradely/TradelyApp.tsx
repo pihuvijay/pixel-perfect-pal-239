@@ -76,7 +76,7 @@ export function TradelyApp() {
 
         {screen.name !== "welcome" && <BottomNav onHome={goHome} active={screen.name === "home"} />}
 
-        {screen.name !== "welcome" && !wing.open && (
+        {screen.name !== "welcome" && !wing.open && !tour?.auto && (
           <WingPill pulse={wing.hasNew} bottom={screen.name === "stock" ? 168 : 100} onClick={() => { setTour(null); setWing((w) => ({ ...w, open: true, hasNew: false })); }} />
         )}
 
@@ -181,7 +181,7 @@ function StockScreen({ s, amount, setAmount, onBack }: { s: Stock; amount: numbe
   const [tf, setTf] = useState<Timeframe>("1M");
   const pct = s.periodPct[tf];
   const series = s.series[tf];
-  const changeUsd = tf === "1D" ? s.todayChange : series[series.length - 1] - series[0];
+  const changeUsd = tf === "1D" ? s.todayChange : (series[series.length - 1] ?? 0) - (series[0] ?? 0);
   return (
     <div className="pb-56">
       <div className="sticky top-0 z-10 flex items-center justify-between bg-background/90 px-4 py-3 backdrop-blur">

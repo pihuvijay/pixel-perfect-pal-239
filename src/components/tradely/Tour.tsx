@@ -9,7 +9,7 @@ export function Tour({ steps, auto, frameRef, onDone }: { steps: TourStep[]; aut
   const [paused, setPaused] = useState(false);
   const [rect, setRect] = useState<Rect | null>(null);
   const reduce = useReducedMotion();
-  const step = steps[i];
+  const step = steps[i] ?? steps[0]!;
 
   useLayoutEffect(() => {
     const frame = frameRef.current;
