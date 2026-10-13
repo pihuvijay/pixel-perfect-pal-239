@@ -8,6 +8,7 @@ import {
 import { TradelyLogo, WingLogo, StockLogo, Sparkline, LineChart, JargonText, RoundBtn } from "./ui";
 import { WingmanPanel, type WingView } from "./Wingman";
 import { Tour, type TourStep } from "./Tour";
+import type { ChatMsg } from "./Chat";
 
 type Ticker = Stock["ticker"];
 type Screen = { name: "welcome" } | { name: "home" } | { name: "stock"; ticker: Ticker } | { name: "order"; ticker: Ticker; amount: number };
@@ -23,6 +24,7 @@ export function TradelyApp() {
   const [tour, setTour] = useState<TourState>(null);
   const [seen, setSeen] = useState<Set<Ticker>>(new Set());
   const [homeSeen, setHomeSeen] = useState(false);
+  const [chat, setChat] = useState<ChatMsg[]>([]);
 
   const goHome = () => {
     setTour(null);
@@ -83,7 +85,8 @@ export function TradelyApp() {
         {tour && <Tour key={tour.steps.map((s) => s.id).join()} steps={tour.steps} auto={tour.auto} frameRef={frameRef} onDone={tour.onDone} />}
 
         <WingmanPanel
-          open={wing.open} expanded={wing.expanded} view={wing.view} amount={amount}
+          open={wing.open} expanded={wing.expanded} view={wing.view} amount={amount} chat={chat} setChat={setChat}
+          onBackToChat={() => setWing((w) => ({ ...w, view: screen.name === "stock" ? { kind: "stock", ticker: screen.ticker } : { kind: "home" } }))}
           onMinimise={minimise}
           onToggleExpand={() => setWing((w) => ({ ...w, expanded: !w.expanded }))}
           onShowHow={() => openStock("NVDA", "tour")}

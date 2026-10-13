@@ -310,11 +310,11 @@ function TipChecker(p: Props) {
   );
 }
 
-function TipResult({ tip, img, amount, onShowStock, onBack }: { tip: Tip; img: string | null; amount: number; onShowStock: (t: Stock["ticker"]) => void; onBack: () => void }) {
+export function TipResult({ tip, img, amount, onShowStock, onBack }: { tip: Tip; img: string | null; amount: number; onShowStock: (t: Stock["ticker"]) => void; onBack?: () => void }) {
   const labels = Array.from(new Set(tip.flags.map((f) => f.label)));
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
-      <button onClick={onBack} className="text-sm font-semibold text-wing">← Check another tip</button>
+      {onBack && <button onClick={onBack} className="text-sm font-semibold text-wing">← Check another tip</button>}
       {img && <img src={img} alt="Your uploaded screenshot" className="max-h-48 w-full rounded-2xl object-cover" />}
       {tip.scam ? (
         <>
