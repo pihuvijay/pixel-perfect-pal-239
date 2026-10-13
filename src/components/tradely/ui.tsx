@@ -65,7 +65,7 @@ export function LineChart({ data, h = 180 }: { data: number[]; h?: number }) {
   const { d, y } = path(data, w, h, 8);
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full" style={{ height: h }} aria-label={`Price chart, ${up ? "up" : "down"} over period`} role="img">
-      <line x1={0} x2={w} y1={y(data[0])} y2={y(data[0])} strokeDasharray="4 5" strokeWidth={1} className="stroke-muted-foreground/40" />
+      <line x1={0} x2={w} y1={y(data[0] ?? 0)} y2={y(data[0] ?? 0)} strokeDasharray="4 5" strokeWidth={1} className="stroke-muted-foreground/40" />
       <motion.path key={d} d={d} fill="none" strokeWidth={2} strokeLinejoin="round" className={up ? "stroke-up" : "stroke-down"}
         initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.6, ease: "easeOut" }} />
     </svg>

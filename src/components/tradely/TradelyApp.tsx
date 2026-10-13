@@ -77,7 +77,7 @@ export function TradelyApp() {
         {screen.name !== "welcome" && <BottomNav onHome={goHome} active={screen.name === "home"} />}
 
         {screen.name !== "welcome" && !wing.open && (
-          <WingPill pulse={wing.hasNew} bottom={screen.name === "stock" ? 168 : 100} onClick={() => setWing((w) => ({ ...w, open: true, hasNew: false }))} />
+          <WingPill pulse={wing.hasNew} bottom={screen.name === "stock" ? 168 : 100} onClick={() => { setTour(null); setWing((w) => ({ ...w, open: true, hasNew: false })); }} />
         )}
 
         {tour && <Tour key={tour.steps.map((s) => s.id).join()} steps={tour.steps} auto={tour.auto} frameRef={frameRef} onDone={tour.onDone} />}

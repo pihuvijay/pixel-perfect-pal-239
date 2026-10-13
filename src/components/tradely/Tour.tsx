@@ -48,7 +48,7 @@ export function Tour({ steps, auto, frameRef, onDone }: { steps: TourStep[]; aut
         <motion.div key={step.id} role="status" aria-live="polite" aria-label={`Tour step ${i + 1} of ${steps.length}: ${step.text}`}
           initial={{ opacity: 0, y: below ? -6 : 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: reduce ? 0 : 0.35 }}
           className="pointer-events-auto absolute left-5 right-5 rounded-2xl bg-wing p-4 text-wing-foreground shadow-soft"
-          style={below ? { top: rect.y + rect.h + pad + 14 } : { top: Math.max(60, rect.y - pad - 118) }}>
+          style={below ? { top: rect.y + rect.h + pad + 14 } : { top: Math.max(60, rect.y - pad - (auto ? 118 : 190)) }}>
           <p className="text-base font-semibold leading-snug">{step.text}</p>
           <div className="mt-2 flex items-center justify-between text-sm opacity-90">
             <span>{auto ? `${i + 1}/${steps.length} · ${paused ? "Paused, tap to resume" : "Tap to pause"}` : ""}</span>
