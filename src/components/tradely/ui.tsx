@@ -85,7 +85,7 @@ export function JargonText({ text, tourFirst = false }: { text: string; tourFirs
           const m = p.match(/^\[\[(.+)\]\]$/);
           if (!m) return <span key={i}>{p}</span>;
           jIdx++;
-          const word = m[1];
+          const word = m[1] ?? "";
           const entry = JARGON[word.toLowerCase()];
           const isFirst = jIdx === 0 && tourFirst;
           return (
