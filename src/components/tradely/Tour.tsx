@@ -14,17 +14,22 @@ export function Tour({ steps, auto, frameRef, onDone }: { steps: TourStep[]; aut
   useLayoutEffect(() => {
     const frame = frameRef.current;
     if (!frame) return;
-    const el = frame.querySelector<HTMLElement>(`[data-tour="${step.id}"]`);
-    if (!el) return;
-    el.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
-    const measure = () => {
-      const f = frame.getBoundingClientRect();
-      const r = el.getBoundingClientRect();
-      setRect({ x: r.left - f.left, y: r.top - f.top, w: r.width, h: r.height });
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    let tries = 0;
+    const start = () => {
+      const el = frame.querySelector<HTMLElement>(`[data-tour="${step.id}"]`);
+      if (!el) { if (tries++ < 30) timers.push(setTimeout(start, 100)); return; }
+      el.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+      const measure = () => {
+        const f = frame.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        setRect({ x: r.left - f.left, y: r.top - f.top, w: r.width, h: r.height });
+      };
+      measure();
+      timers.push(setTimeout(measure, 450));
     };
-    measure();
-    const t = setTimeout(measure, 400);
-    return () => clearTimeout(t);
+    start();
+    return () => timers.forEach(clearTimeout);
   }, [step.id, frameRef, reduce]);
 
   useEffect(() => {
