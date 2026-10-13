@@ -133,7 +133,7 @@ function BottomNav({ onHome, active }: { onHome: () => void; active: boolean }) 
 function Welcome({ onGo }: { onGo: () => void }) {
   const rows = [
     { I: Coins, t: "Shares from £1" }, { I: Activity, t: "Live market data" },
-    { I: Sparkles, t: "Wingman guidance built in" }, { I: Award, t: "Award-winning support" },
+    { I: Sparkles, t: "Guidance built in" }, { I: Award, t: "Award-winning support" },
   ];
   return (
     <div className="bg-welcome flex min-h-dvh flex-col px-7 pb-10 pt-16 text-night-foreground sm:min-h-[824px]">
