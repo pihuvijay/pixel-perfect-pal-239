@@ -158,7 +158,7 @@ function MenuItem({ icon, label, sub, onClick }: { icon: ReactNode; label: strin
   );
 }
 
-function Chips({ items, onPick, label }: { items: string[]; onPick: (q: string) => void; label?: string }) {
+function Chips({ items, onPick, label }: { items: string[]; onPick: (q: string) => void; label?: string | undefined }) {
   if (!items.length) return null;
   return (
     <div className="mt-3">
