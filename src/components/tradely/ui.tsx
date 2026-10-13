@@ -50,7 +50,7 @@ function path(data: number[], w: number, h: number, pad = 2) {
 }
 
 export function Sparkline({ data, w = 64, h = 28 }: { data: number[]; w?: number; h?: number }) {
-  const up = data[data.length - 1] >= data[0];
+  const up = (data[data.length - 1] ?? 0) >= (data[0] ?? 0);
   const { d } = path(data, w, h);
   return (
     <svg width={w} height={h} aria-hidden>
@@ -61,7 +61,7 @@ export function Sparkline({ data, w = 64, h = 28 }: { data: number[]; w?: number
 
 export function LineChart({ data, h = 180 }: { data: number[]; h?: number }) {
   const w = 350;
-  const up = data[data.length - 1] >= data[0];
+  const up = (data[data.length - 1] ?? 0) >= (data[0] ?? 0);
   const { d, y } = path(data, w, h, 8);
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full" style={{ height: h }} aria-label={`Price chart, ${up ? "up" : "down"} over period`} role="img">
