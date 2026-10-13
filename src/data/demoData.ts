@@ -223,6 +223,23 @@ export const LINKS = {
   scamSmart: "https://www.fca.org.uk/scamsmart",
 };
 
+// Demo social links → example tips. Handles are made up.
+export type Platform = "TikTok" | "X" | "Instagram" | "YouTube";
+export const DEMO_LINKS: { label: string; url: string; tipId: Tip["id"]; handle: string; likes: string; shares: string }[] = [
+  { label: "Example TikTok link", url: "https://www.tiktok.com/@moneymoves_daily/video/123", tipId: "A", handle: "@moneymoves_daily", likes: "48.2K", shares: "3.1K" },
+  { label: "Example X link", url: "https://x.com/trader_jay/status/456", tipId: "B", handle: "@trader_jay", likes: "12.7K", shares: "2.4K" },
+  { label: "Example Instagram link", url: "https://www.instagram.com/p/789", tipId: "C", handle: "@ai_profit_club", likes: "9.8K", shares: "870" },
+];
+
+export function detectPlatform(url: string): Platform | null {
+  const u = url.toLowerCase();
+  if (u.includes("tiktok.com")) return "TikTok";
+  if (u.includes("x.com") || u.includes("twitter.com")) return "X";
+  if (u.includes("instagram.com")) return "Instagram";
+  if (u.includes("youtube.com") || u.includes("youtu.be")) return "YouTube";
+  return null;
+}
+
 export const TOUR_STEPS = [
   { id: "price", text: "This is what one share costs right now." },
   { id: "chart", text: "This shows how the price has moved. Green means up over this period, red means down." },
