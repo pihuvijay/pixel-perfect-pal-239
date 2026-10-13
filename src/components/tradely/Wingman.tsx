@@ -5,6 +5,7 @@ import {
   STOCKS, TIPS, QUESTIONS, PAUSE_QUESTIONS, LINKS, DATA_AS_OF, fmtGBP, type Stock, type Tip,
 } from "@/data/demoData";
 import { LineChart, WingLogo } from "./ui";
+import { Chat, type ChatMsg } from "./Chat";
 
 export type WingView =
   | { kind: "home" }
@@ -18,10 +19,13 @@ type Props = {
   expanded: boolean;
   view: WingView;
   amount: number;
+  chat: ChatMsg[];
+  setChat: (fn: (m: ChatMsg[]) => ChatMsg[]) => void;
   onMinimise: () => void;
   onToggleExpand: () => void;
   onShowHow: () => void;
   onOpenTip: () => void;
+  onBackToChat: () => void;
   onShowStock: (t: Stock["ticker"]) => void;
   onConfirm: (t: Stock["ticker"]) => void;
   onNotNow: (t: Stock["ticker"]) => void;
@@ -39,6 +43,8 @@ function Card({ title, children, tone = "default" }: { title?: string; children:
 
 export function WingmanPanel(p: Props) {
   const reduce = useReducedMotion();
+  const v = p.view;
+  const isChat = v.kind === "home" || v.kind === "stock";
   return (
     <AnimatePresence>
       {p.open && (
@@ -56,10 +62,22 @@ export function WingmanPanel(p: Props) {
               {p.expanded ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
             </button>
           </header>
-          <div className="no-scrollbar flex-1 space-y-3 overflow-y-auto px-5 py-4">
-            <PanelBody {...p} />
-            <p className="pt-2 pb-4 text-center text-xs text-muted-foreground">Wingman explains, never advises. {DATA_AS_OF}.</p>
-          </div>
+          {isChat ? (
+            <Chat
+              messages={p.chat} setMessages={p.setChat} amount={p.amount}
+              ticker={v.kind === "stock" ? v.ticker : null}
+              prelude={v.kind === "stock" ? <StockCards ticker={v.ticker} amount={p.amount} /> : undefined}
+              onTour={p.onShowHow} onOpenTip={p.onOpenTip} onShowStock={p.onShowStock}
+            />
+          ) : (
+            <div className="no-scrollbar flex-1 space-y-3 overflow-y-auto px-5 py-4">
+              {(v.kind === "tip" || v.kind === "learned") && (
+                <button onClick={p.onBackToChat} className="min-h-11 text-sm font-semibold text-wing">← Back to chat</button>
+              )}
+              <PanelBody {...p} />
+              <p className="pt-2 pb-4 text-center text-xs text-muted-foreground">Wingman explains, never advises. {DATA_AS_OF}.</p>
+            </div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
@@ -68,23 +86,10 @@ export function WingmanPanel(p: Props) {
 
 function PanelBody(p: Props) {
   const v = p.view;
-  if (v.kind === "home") return (
-    <>
-      <p className="text-lg leading-relaxed">Hi Sam, I'm Wingman. I'll explain what's going on as you go, so you don't need to know what to ask.</p>
-      <button onClick={p.onShowHow} className="block w-full rounded-3xl bg-wing p-5 text-left text-wing-foreground active:scale-[0.98]" aria-label="Show me how investing works">
-        <span className="block text-lg font-bold">Show me how investing works</span>
-        <span className="block opacity-90">A 20-second guided tour of a real stock.</span>
-      </button>
-      <button onClick={p.onOpenTip} className="block w-full rounded-3xl border-2 border-wing bg-wing-soft p-5 text-left active:scale-[0.98]" aria-label="Saw a tip online? Check it">
-        <span className="block text-lg font-bold">Saw a tip online? Check it</span>
-        <span className="block text-muted-foreground">Paste a caption or screenshot.</span>
-      </button>
-    </>
-  );
-  if (v.kind === "stock") return <StockCards ticker={v.ticker} amount={p.amount} />;
   if (v.kind === "pause") return <PauseCheck key={v.ticker} {...p} ticker={v.ticker} />;
   if (v.kind === "learned") return <Learned confirmed={v.confirmed} ticker={v.ticker} amount={p.amount} />;
-  return <TipChecker {...p} />;
+  if (v.kind === "tip") return <TipChecker {...p} />;
+  return null;
 }
 
 export function Happening({ s }: { s: Stock }) {
