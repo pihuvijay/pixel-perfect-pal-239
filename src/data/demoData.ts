@@ -173,6 +173,8 @@ export const TIPS: Tip[] = [
     flags: [
       { phrase: "about to explode", label: "Promises an outcome" },
       { phrase: "get in before earnings", label: "Pushes you to hurry" },
+      { phrase: "🚀", label: "No risks mentioned" },
+      { phrase: "Nvidia", label: "Paid promotion not labelled?" },
     ],
     claim: "Price will rise fast after earnings.",
     facts: "Price $182.40 (≈£136.80), down 12% this month. Next earnings expected in November.",
